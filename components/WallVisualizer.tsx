@@ -116,6 +116,12 @@ export default function WallVisualizer() {
         }
     };
 
+    const handleCalibrationConfirm = (points: { x: number, y: number }[], heightCm: number) => {
+        setWallPoints(points);
+        setWallHeightCm(heightCm);
+        setStep('view');
+    };
+
     return (
         <div className="flex flex-col h-screen w-full bg-[#FCFCFC] text-[#103948] font-sans overflow-hidden">
             {/* Fullscreen View Mode */}
