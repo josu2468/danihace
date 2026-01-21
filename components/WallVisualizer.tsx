@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import WallCalibrator from './WallCalibrator';
 import IllustrationRenderer from './IllustrationRenderer';
-import { Camera, Image as ImageIcon, ArrowLeft } from 'lucide-react';
+import { Camera, Image as ImageIcon, ArrowLeft, Copy, Check } from 'lucide-react';
 
 const SIZES = [
     { width: 13, height: 18, label: '13x18' },
@@ -120,6 +120,15 @@ export default function WallVisualizer() {
         setWallPoints(points);
         setWallHeightCm(heightCm);
         setStep('view');
+    };
+
+    const [copySuccess, setCopySuccess] = useState(false);
+    const googleFormLink = "https://docs.google.com/forms/d/e/1FAIpQLScGtUxsBXADIIyYWZ6YkLlDo4AL8AbP_-Gq1nWZ4o8THbMFhA/viewform?usp=header";
+
+    const handleCopyLink = () => {
+        navigator.clipboard.writeText(googleFormLink);
+        setCopySuccess(true);
+        setTimeout(() => setCopySuccess(false), 2000);
     };
 
     return (
@@ -280,6 +289,28 @@ export default function WallVisualizer() {
                                 <div className="space-y-4 max-w-xl">
                                     <h2 className="text-5xl font-bold text-[#103948] tracking-tight font-poppins">Visualiza mi arte<br />en tu espacio.</h2>
                                     <p className="text-gray-500 text-lg leading-relaxed">Sube una foto de tu pared y descubre cómo combinan mis ilustraciones con tu decoración antes de comprar.</p>
+
+                                    {/* Google Form Link Section */}
+                                    <div className="flex flex-col items-center gap-2 mt-4 animate-in slide-in-from-bottom-4 fade-in duration-700">
+                                        <p className="text-sm font-medium text-gray-400 uppercase tracking-wider">¡Tu opinión me ayuda!</p>
+                                        <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-full pl-4 pr-1 py-1 shadow-sm hover:shadow-md transition-shadow group/link max-w-md w-full">
+                                            <a
+                                                href={googleFormLink}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-xs text-gray-500 truncate flex-1 hover:text-[#103948] transition-colors text-left"
+                                            >
+                                                {googleFormLink}
+                                            </a>
+                                            <button
+                                                onClick={handleCopyLink}
+                                                className={`flex items-center justify-center w-8 h-8 rounded-full transition-all ${copySuccess ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600 hover:bg-[#103948] hover:text-white'}`}
+                                                title="Copiar enlace"
+                                            >
+                                                {copySuccess ? <Check size={14} /> : <Copy size={14} />}
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div className="grid gap-6 w-full max-w-sm">
