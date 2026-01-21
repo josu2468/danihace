@@ -122,13 +122,17 @@ export default function WallVisualizer() {
         setStep('view');
     };
 
-    const [copySuccess, setCopySuccess] = useState(false);
-    const googleFormLink = "https://docs.google.com/forms/d/e/1FAIpQLScGtUxsBXADIIyYWZ6YkLlDo4AL8AbP_-Gq1nWZ4o8THbMFhA/viewform?usp=header";
+    const [copySuccessId, setCopySuccessId] = useState<string | null>(null);
 
-    const handleCopyLink = () => {
-        navigator.clipboard.writeText(googleFormLink);
-        setCopySuccess(true);
-        setTimeout(() => setCopySuccess(false), 2000);
+    const LINKS = [
+        { id: 'google', url: "https://docs.google.com/forms/d/e/1FAIpQLScGtUxsBXADIIyYWZ6YkLlDo4AL8AbP_-Gq1nWZ4o8THbMFhA/viewform?usp=header", label: "Google Forms" },
+        { id: 'husr', url: "https://husrcloud.hhsanroque.com/encuestashusr/index.php/257326?lang=es", label: "Encuesta HUSR" }
+    ];
+
+    const handleCopyLink = (id: string, url: string) => {
+        navigator.clipboard.writeText(url);
+        setCopySuccessId(id);
+        setTimeout(() => setCopySuccessId(null), 2000);
     };
 
     return (
@@ -290,26 +294,30 @@ export default function WallVisualizer() {
                                     <h2 className="text-5xl font-bold text-[#103948] tracking-tight font-poppins">Visualiza mi arte<br />en tu espacio.</h2>
                                     <p className="text-gray-500 text-lg leading-relaxed">Sube una foto de tu pared y descubre cómo combinan mis ilustraciones con tu decoración antes de comprar.</p>
 
-                                    {/* Google Form Link Section */}
-                                    <div className="flex flex-col items-center gap-2 mt-4 animate-in slide-in-from-bottom-4 fade-in duration-700">
+                                    {/* Survey Links Section */}
+                                    <div className="flex flex-col items-center gap-3 mt-4 animate-in slide-in-from-bottom-4 fade-in duration-700 w-full max-w-md">
                                         <p className="text-sm font-medium text-gray-400 uppercase tracking-wider">¡Tu opinión me ayuda!</p>
-                                        <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-full pl-4 pr-1 py-1 shadow-sm hover:shadow-md transition-shadow group/link max-w-md w-full">
-                                            <a
-                                                href={googleFormLink}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-xs text-gray-500 truncate flex-1 hover:text-[#103948] transition-colors text-left"
-                                            >
-                                                {googleFormLink}
-                                            </a>
-                                            <button
-                                                onClick={handleCopyLink}
-                                                className={`flex items-center justify-center w-8 h-8 rounded-full transition-all ${copySuccess ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600 hover:bg-[#103948] hover:text-white'}`}
-                                                title="Copiar enlace"
-                                            >
-                                                {copySuccess ? <Check size={14} /> : <Copy size={14} />}
-                                            </button>
-                                        </div>
+
+                                        {LINKS.map((link) => (
+                                            <div key={link.id} className="flex items-center gap-2 bg-white border border-gray-200 rounded-full pl-4 pr-1 py-1 shadow-sm hover:shadow-md transition-shadow group/link w-full">
+                                                <a
+                                                    href={link.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-xs text-gray-500 truncate flex-1 hover:text-[#103948] transition-colors text-left"
+                                                    title={link.url}
+                                                >
+                                                    {link.url}
+                                                </a>
+                                                <button
+                                                    onClick={() => handleCopyLink(link.id, link.url)}
+                                                    className={`flex items-center justify-center w-8 h-8 rounded-full transition-all ${copySuccessId === link.id ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-600 hover:bg-[#103948] hover:text-white'}`}
+                                                    title="Copiar enlace"
+                                                >
+                                                    {copySuccessId === link.id ? <Check size={14} /> : <Copy size={14} />}
+                                                </button>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
 
